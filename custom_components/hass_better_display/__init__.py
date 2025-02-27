@@ -8,7 +8,7 @@ from homeassistant.core import HomeAssistant
 from .const import DOMAIN, CONF_BASE_URL, CONF_DEVICE_NAME
 from .device import MonitorDevice
 
-PLATFORMS: list[Platform] = [Platform.LIGHT, Platform.MEDIA_PLAYER]
+PLATFORMS: list[Platform] = [Platform.LIGHT, Platform.FAN]
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up Monitor Control from a config entry."""
