@@ -4,8 +4,10 @@ import aiohttp
 from datetime import timedelta
 import async_timeout
 
+from custom_components.hass_better_display.const import DOMAIN
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
+from homeassistant.helpers.device_registry import DeviceInfo
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -32,6 +34,15 @@ class MonitorDevice:
             name="monitor_values",
             update_method=self._async_update_data,
             update_interval=timedelta(seconds=30),  # 每30秒更新一次
+        )
+
+        # 添加设备信息
+        self._attr_device_info = DeviceInfo(
+            identifiers={(DOMAIN, name)},
+            name=name,
+            manufacturer="HASS Better Display",
+            model="Display Controller",
+            sw_version="1.0.0",
         )
 
     async def _async_update_data(self):
@@ -92,4 +103,9 @@ class MonitorDevice:
     @property
     def volume(self) -> float:
         """Return the volume of the monitor."""
-        return self._volume 
+        return self._volume
+
+    @property
+    def device_info(self):
+        """Return device info."""
+        return self._attr_device_info 
