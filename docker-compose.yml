@@ -1,0 +1,14 @@
+version: '3'
+services:
+  homeassistant:
+    container_name: homeassistant
+    image: "ghcr.io/home-assistant/home-assistant:stable"
+    volumes:
+      - ./config:/config
+      # 将当前开发的组件直接映射到容器中
+      - ./custom_components:/config/custom_components
+    environment:
+      - TZ=Asia/Shanghai
+    ports:
+      - "8123:8123"
+    restart: unless-stopped
