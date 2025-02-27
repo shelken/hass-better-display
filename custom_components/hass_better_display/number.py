@@ -6,6 +6,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
+from homeassistant.helpers.entity import EntityCategory
 
 from .const import DOMAIN
 from .device import MonitorDevice
@@ -39,12 +40,13 @@ class MonitorBrightnessNumber(CoordinatorEntity, NumberEntity):
         self._attr_name = f"{device.name} Brightness"
         self._attr_native_min_value = 0.0
         self._attr_native_max_value = 1.0
-        self._attr_native_step = 1/12
+        self._attr_native_step = 1/16
         self._attr_device_class = "brightness"
-        self._attr_entity_category = "config"
+        self._attr_entity_category = EntityCategory.CONFIG
         self._attr_has_entity_name = True
         self._attr_translation_key = "brightness"
         self._attr_device_info = device.device_info
+        self._attr_icon = "mdi:brightness-6"  # 亮度图标
 
     @property
     def native_value(self) -> float:
@@ -66,12 +68,13 @@ class MonitorVolumeNumber(CoordinatorEntity, NumberEntity):
         self._attr_name = f"{device.name} Volume"
         self._attr_native_min_value = 0.0
         self._attr_native_max_value = 1.0
-        self._attr_native_step = 1/12
+        self._attr_native_step = 1/16
         self._attr_device_class = "volume"
-        self._attr_entity_category = "config"
+        self._attr_entity_category = EntityCategory.CONFIG
         self._attr_has_entity_name = True
         self._attr_translation_key = "volume"
         self._attr_device_info = device.device_info
+        self._attr_icon = "mdi:volume-high"  # 音量图标
 
     @property
     def native_value(self) -> float:
