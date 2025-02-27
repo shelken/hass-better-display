@@ -43,6 +43,10 @@ class MonitorDevice:
             manufacturer="HASS Better Display",
             model="Display Controller",
             sw_version="1.0.0",
+            # 添加以下属性来改善 HomeKit 集成
+            suggested_area="Office",  # 建议的房间
+            entry_type="service",     # 设备类型
+            configuration_url=base_url,  # 配置 URL
         )
 
     async def _async_update_data(self):
