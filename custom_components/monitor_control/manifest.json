@@ -1,0 +1,12 @@
+{
+  "domain": "hass_better_display",
+  "name": "HASS Better Display",
+  "version": "1.0.0",
+  "config_flow": true,
+  "documentation": "https://github.com/shelken/hass-better-display",
+  "issue_tracker": "https://github.com/shelken/hass-better-display/issues",
+  "dependencies": [],
+  "codeowners": ["@shelken"],
+  "iot_class": "local_polling",
+  "requirements": ["aiohttp"]
+} 

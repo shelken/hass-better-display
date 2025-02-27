@@ -1,0 +1,10 @@
+custom_components/monitor_control/
+├── __init__.py
+├── manifest.json
+├── config_flow.py
+├── const.py
+├── entity.py
+├── translations/
+│   ├── en.json
+│   └── zh-Hans.json
+└── device.py 

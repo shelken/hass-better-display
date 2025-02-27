@@ -1,0 +1,22 @@
+{
+    "config": {
+        "step": {
+            "user": {
+                "title": "HASS Better Display Setup",
+                "description": "Set up your display control integration. The device name should match your monitor's name (e.g., GE278UR)",
+                "data": {
+                    "device_name": "Monitor Name",
+                    "base_url": "API Base URL (e.g., http://mio.local:55777)"
+                }
+            }
+        },
+        "error": {
+            "cannot_connect": "Failed to connect",
+            "invalid_auth": "Invalid authentication",
+            "unknown": "Unexpected error"
+        },
+        "abort": {
+            "already_configured": "Device is already configured"
+        }
+    }
+} 

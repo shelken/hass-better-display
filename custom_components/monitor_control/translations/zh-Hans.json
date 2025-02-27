@@ -1,0 +1,22 @@
+{
+    "config": {
+        "step": {
+            "user": {
+                "title": "显示器控制设置",
+                "description": "设置您的显示器控制集成。设备名称需要与您的显示器名称匹配（例如：GE278UR）",
+                "data": {
+                    "device_name": "显示器名称",
+                    "base_url": "API 地址（例如：http://mio.local:55777）"
+                }
+            }
+        },
+        "error": {
+            "cannot_connect": "连接失败",
+            "invalid_auth": "认证无效",
+            "unknown": "未知错误"
+        },
+        "abort": {
+            "already_configured": "设备已经配置"
+        }
+    }
+} 
