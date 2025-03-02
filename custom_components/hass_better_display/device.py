@@ -26,6 +26,9 @@ class MonitorDevice:
         self._base_url = base_url.rstrip('/')  # 移除末尾的斜杠
         self._brightness = 0.5
         self._volume = 0.5
+        self._source = "0"
+        # 添加 unique_id 属性
+        self.unique_id = f"{DOMAIN}_{name}"
         
         # 创建更新协调器
         self.coordinator = DataUpdateCoordinator(
@@ -66,9 +69,18 @@ class MonitorDevice:
                         if resp.status == 200:
                             self._brightness = float(await resp.text())
                     
+                    # 获取输入源
+                    source_url = f"{self._base_url}/get?feature=ddc&vcp=inputSelect&name={self.name}"
+                    async with session.get(source_url) as resp:
+                        if resp.status == 200:
+                            self._source = str(await resp.text()).strip()
+                        else:
+                            self._source = "0"
+
                     return {
                         "brightness": self._brightness,
-                        "volume": self._volume
+                        "volume": self._volume,
+                        "source": self._source
                     }
         except Exception as err:
             raise UpdateFailed(f"Error communicating with device: {err}")
@@ -99,6 +111,20 @@ class MonitorDevice:
         except Exception as err:
             _LOGGER.error("Error setting volume: %s", err)
 
+    async def switch_source(self, source_value: str) -> None:
+        """Switch input source."""
+        try:
+            url = f"{self._base_url}/set?vcp=inputSelect&name={self.name}&ddc={source_value}"
+            async with aiohttp.ClientSession() as session:
+                async with session.get(url) as response:
+                    if response.status == 200:
+                        _LOGGER.info("Successfully switched to source: %s", source_value)
+                        # 强制更新数据
+                        self._source = source_value
+                        await self.coordinator.async_request_refresh()
+        except Exception as err:
+            _LOGGER.error("Failed to switch source: %s", err)
+
     @property
     def brightness(self) -> float:
         """Return the brightness of the monitor."""
@@ -108,6 +134,11 @@ class MonitorDevice:
     def volume(self) -> float:
         """Return the volume of the monitor."""
         return self._volume
+    
+    @property
+    def source(self) -> str:
+        """Return the source of the monitor."""
+        return self._source
 
     @property
     def device_info(self):

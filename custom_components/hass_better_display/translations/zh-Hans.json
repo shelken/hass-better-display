@@ -2,21 +2,39 @@
     "config": {
         "step": {
             "user": {
-                "title": "显示器控制设置",
+                "title": "配置显示器",
                 "description": "设置您的显示器控制集成。设备名称需要与您的显示器名称匹配（例如：GE278UR）",
                 "data": {
-                    "device_name": "显示器名称",
-                    "base_url": "API 地址（例如：http://mio.local:55777）"
+                    "device_name": "设备名称",
+                    "base_url": "基础URL",
+                    "source_list": "输入源列表 (格式: hdmi1:14,hdmi2:15,dp:16)"
                 }
             }
         },
         "error": {
             "cannot_connect": "连接失败",
             "invalid_auth": "认证无效",
-            "unknown": "未知错误"
+            "unknown": "未知错误",
+            "invalid_source_list": "输入源列表格式无效，请使用正确的格式，例如：hdmi1:14,hdmi2:15,dp:16"
         },
         "abort": {
             "already_configured": "设备已经配置"
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "title": "更新显示器配置",
+                "description": "修改显示器控制集成的配置",
+                "data": {
+                    "device_name": "设备名称",
+                    "base_url": "基础URL",
+                    "source_list": "输入源列表 (格式: hdmi1:14,hdmi2:15,dp:16)"
+                }
+            }
+        },
+        "error": {
+            "invalid_source_list": "输入源列表格式无效，请使用正确的格式，例如：hdmi1:14,hdmi2:15,dp:16"
         }
     }
 } 

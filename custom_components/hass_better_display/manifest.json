@@ -6,7 +6,9 @@
   "config_flow": true,
   "documentation": "https://github.com/shelken/hass-better-display",
   "issue_tracker": "https://github.com/shelken/hass-better-display/issues",
-  "dependencies": [],
+  "dependencies": [
+    "button"
+  ],
   "codeowners": ["@shelken"],
   "iot_class": "local_polling",
   "requirements": ["aiohttp"]

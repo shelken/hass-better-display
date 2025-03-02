@@ -6,14 +6,16 @@
                 "description": "Set up your display control integration. The device name should match your monitor's name (e.g., GE278UR)",
                 "data": {
                     "device_name": "Monitor Name",
-                    "base_url": "API Base URL (e.g., http://mio.local:55777)"
+                    "base_url": "API Base URL (e.g., http://mio.local:55777)",
+                    "source_list": "Source List (e.g., hdmi1:14,hdmi2:15,dp:16)"
                 }
             }
         },
         "error": {
             "cannot_connect": "Failed to connect",
             "invalid_auth": "Invalid authentication",
-            "unknown": "Unexpected error"
+            "unknown": "Unexpected error",
+            "invalid_source_list": "Invalid source list format, please use the correct format, e.g., hdmi1:14,hdmi2:15,dp:16"
         },
         "abort": {
             "already_configured": "Device is already configured"

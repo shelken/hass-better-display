@@ -1,5 +1,6 @@
 """The Monitor Control integration."""
 from __future__ import annotations
+import logging
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
@@ -8,7 +9,12 @@ from homeassistant.core import HomeAssistant
 from .const import DOMAIN, CONF_BASE_URL, CONF_DEVICE_NAME
 from .device import MonitorDevice
 
-PLATFORMS: list[Platform] = [Platform.LIGHT, Platform.FAN]
+
+PLATFORMS: list[str] = [
+    Platform.LIGHT,
+    Platform.FAN,
+    Platform.SELECT,
+]
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up Monitor Control from a config entry."""
@@ -26,9 +32,3 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     return True
 
-async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    """Unload a config entry."""
-    if unload_ok := await hass.config_entries.async_unload_platforms(entry, PLATFORMS):
-        hass.data[DOMAIN].pop(entry.entry_id)
-
-    return unload_ok 
