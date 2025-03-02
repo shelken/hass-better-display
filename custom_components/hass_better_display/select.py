@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Any
+from typing import Any, Dict
 
 from homeassistant.components.select import SelectEntity
 from homeassistant.config_entries import ConfigEntry
@@ -29,7 +29,7 @@ async def async_setup_entry(
     select_entity = MonitorSelect(device, config_entry)
 
     #将 select_entity 添加到 hass.data[DOMAIN]["entities"] 中
-    if hass.data[DOMAIN].get("entities") is None:
+    if "entities" not in hass.data[DOMAIN]:
         hass.data[DOMAIN]["entities"] = {}
     hass.data[DOMAIN]["entities"][select_entity._attr_unique_id] = select_entity
 
@@ -57,38 +57,32 @@ class MonitorSelect(SelectEntity):
         self._source_list = config_entry.data.get(CONF_SOURCE_LIST, {})
         self._attr_unique_id = f"{device.unique_id}_input_source_select"
         self._attr_name = f"{device.name} Input Source"
-        # 从配置用户配置的输入源列表中获取选项
-        # 给每个key添加一个前缀 切换到 xx
-        self._attr_options = [f"切换到 {key}" for key in self._source_list.keys()]
-        
+        self._attr_options = self._generate_options()
         self._attr_device_info = device.device_info
+
+    def _generate_options(self) -> list[str]:
+        """生成选项列表."""
+        return [f"切换到 {key}" for key in self._source_list.keys()]
+
+    def _generate_source_mapping(self) -> Dict[str, str]:
+        """生成源映射."""
+        return {value: f"切换到 {key}" for key, value in self._source_list.items()}
 
     @property
     def current_option(self) -> str | None:
         """返回当前选中的选项。"""
-        # 可以直接从设备获取当前输入源
         source_value = self._device.source
-        source_mapping = {
-           value : f"切换到 {key}" for key, value in self._source_list.items()
-        }
-        # _LOGGER.info(f"source_value: {source_value}")
-        # _LOGGER.info(f"source_mapping: {source_mapping}")
-        # _LOGGER.info(f"current_option: {source_mapping.get(source_value)}")
+        source_mapping = self._generate_source_mapping()
         return source_mapping.get(source_value)
 
     async def async_select_option(self, option: str) -> None:
         """Change the selected option."""
-        # 将选项映射到对应的输入源值
-        source_mapping = {
-            f"切换到 {key}": value for key, value in self._source_list.items()
-        }
-        # _LOGGER.info(f"async_select_option: {option}")
+        source_mapping = self._generate_source_mapping()
         if option in source_mapping:
             await self._device.switch_source(source_mapping.get(option))
 
     async def update_config(self, config_entry: ConfigEntry) -> None:
         """Update the config."""
         self._source_list = config_entry.data.get(CONF_SOURCE_LIST, {})
-        self._attr_options = [f"切换到 {key}" for key in self._source_list.keys()]
-        
+        self._attr_options = self._generate_options()
         self.async_write_ha_state()
