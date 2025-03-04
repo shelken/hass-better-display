@@ -2,7 +2,7 @@
   "domain": "hass_better_display",
   "name": "HASS Better Display",
   "icon": "mdi:monitor",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "config_flow": true,
   "documentation": "https://github.com/shelken/hass-better-display",
   "issue_tracker": "https://github.com/shelken/hass-better-display/issues",
