@@ -77,9 +77,9 @@ class MonitorSelect(SelectEntity):
 
     async def async_select_option(self, option: str) -> None:
         """Change the selected option."""
-        source_mapping = self._generate_source_mapping()
-        if option in source_mapping:
-            await self._device.switch_source(source_mapping.get(option))
+        option = option.split(" ")[1]
+        if option in self._source_list.keys():
+            await self._device.switch_source(self._source_list.get(option))
 
     async def update_config(self, config_entry: ConfigEntry) -> None:
         """Update the config."""
