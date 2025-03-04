@@ -33,13 +33,15 @@ class MonitorVolumeFan(CoordinatorEntity, FanEntity):
         self._attr_unique_id = f"{device.name}_volume"
         self._attr_name = f"{device.name} Volume"
         self._attr_device_info = device.device_info
-        self._attr_supported_features = FanEntityFeature.SET_SPEED
+        self._attr_supported_features = FanEntityFeature.SET_SPEED | \
+                                        FanEntityFeature.TURN_ON | \
+                                        FanEntityFeature.TURN_OFF
         self._attr_icon = "mdi:volume-high"
 
     @property
     def is_on(self) -> bool:
         """Return true if fan is on."""
-        return self._device.volume > 0
+        return self._device.mute_state == 'off'
 
     @property
     def percentage(self) -> int | None:
@@ -54,10 +56,10 @@ class MonitorVolumeFan(CoordinatorEntity, FanEntity):
             volume = round(percentage / 100, 2)
             await self._device.async_set_volume(volume)
 
-    async def async_turn_on(self, **kwargs) -> None:
+    async def async_turn_on(self, p, pm, **kwargs) -> None:
         """Turn on the fan."""
-        await self._device.async_set_volume(0.5)
+        await self._device.async_mute_volume("off")
 
     async def async_turn_off(self, **kwargs) -> None:
         """Turn off the fan."""
-        await self._device.async_set_volume(0) 
+        await self._device.async_mute_volume("on")

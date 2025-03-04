@@ -26,6 +26,7 @@ class MonitorDevice:
         self._base_url = base_url.rstrip('/')  # 移除末尾的斜杠
         self._brightness = 0.5
         self._volume = 0.5
+        self._mute_state = 'off'
         self._source = "0"
         # 添加 unique_id 属性
         self.unique_id = f"{DOMAIN}_{name}"
@@ -62,7 +63,13 @@ class MonitorDevice:
                     async with session.get(volume_url) as resp:
                         if resp.status == 200:
                             self._volume = float(await resp.text())
-                    
+
+                    # 获取静音状态
+                    volume_url = f"{self._base_url}/get?feature=mute&name={self.name}"
+                    async with session.get(volume_url) as resp:
+                        if resp.status == 200:
+                            self._mute_state = str(await resp.text()).strip()
+
                     # 获取亮度
                     brightness_url = f"{self._base_url}/get?feature=brightness&name={self.name}"
                     async with session.get(brightness_url) as resp:
@@ -80,7 +87,8 @@ class MonitorDevice:
                     return {
                         "brightness": self._brightness,
                         "volume": self._volume,
-                        "source": self._source
+                        "source": self._source,
+                        "mute_state": self._mute_state
                     }
         except Exception as err:
             raise UpdateFailed(f"Error communicating with device: {err}")
@@ -107,6 +115,19 @@ class MonitorDevice:
                     if response.status == 200:
                         self._volume = volume
                         # 强制更新数据
+                        await self.coordinator.async_request_refresh()
+        except Exception as err:
+            _LOGGER.error("Error setting volume: %s", err)
+
+    async def async_mute_volume(self, mute_value: str) -> None:
+        """Set monitor volume."""
+        try:
+            url = f"{self._base_url}/set?feature=mute&name={self.name}&value={mute_value}"
+            async with aiohttp.ClientSession() as session:
+                async with session.get(url) as response:
+                    if response.status == 200:
+                        # 强制更新数据
+                        self._mute_state = mute_value
                         await self.coordinator.async_request_refresh()
         except Exception as err:
             _LOGGER.error("Error setting volume: %s", err)
@@ -139,6 +160,10 @@ class MonitorDevice:
     def source(self) -> str:
         """Return the source of the monitor."""
         return self._source
+    
+    @property
+    def mute_state(self) -> str:
+        return self._mute_state
 
     @property
     def device_info(self):

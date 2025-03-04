@@ -52,9 +52,10 @@ class MonitorBrightnessLight(CoordinatorEntity, LightEntity):
         if ATTR_BRIGHTNESS in kwargs:
             brightness = round(kwargs[ATTR_BRIGHTNESS] / 255, 2)
             await self._device.async_set_brightness(brightness)
-        else:
-            await self._device.async_set_brightness(1.0)
+        # else:
+        #     await self._device.async_set_brightness(self._device.brightness)
 
     async def async_turn_off(self, **kwargs) -> None:
         """Turn the light off."""
-        await self._device.async_set_brightness(0.0) 
+        # 禁用关闭功能，不执行任何操作
+        pass
