@@ -30,5 +30,15 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
+    # 监听配置变更
+    async def config_update(hass, entry):
+        old_device = hass.data[DOMAIN][entry.entry_id]
+        await old_device.update_config(entry)
+        
+    # 注册更新监听器
+    entry.async_on_unload(
+        entry.add_update_listener(config_update)
+    )
+
     return True
 

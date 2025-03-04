@@ -4,7 +4,8 @@ import aiohttp
 from datetime import timedelta
 import async_timeout
 
-from custom_components.hass_better_display.const import DOMAIN
+from custom_components.hass_better_display.const import CONF_BASE_URL, CONF_DEVICE_NAME, DOMAIN
+from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 from homeassistant.helpers.device_registry import DeviceInfo
@@ -52,6 +53,12 @@ class MonitorDevice:
             entry_type="service",     # 设备类型
             configuration_url=base_url,  # 配置 URL
         )
+
+    async def update_config(self, config_entry: ConfigEntry) -> None:
+        """更新配置."""
+        # _LOGGER.info("更新配置: %s", config_entry.data)
+        self._base_url = config_entry.data[CONF_BASE_URL]
+        self.name = config_entry.data[CONF_DEVICE_NAME]
 
     async def _async_update_data(self):
         """获取最新的显示器数据."""
