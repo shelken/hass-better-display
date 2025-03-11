@@ -31,6 +31,15 @@ HASS Better Display 是一个用于 Home Assistant 的集成，旨在提供对�
 
 一旦集成成功，用户可以在 Home Assistant 的仪表板上找到控制显示器的选项。用户可以通过简单的点击来调整亮度、音量和切换输入源。
 
+我的家庭
+
+![](assets/家庭页面.png)
+
+home-assistant
+
+
+![](assets/home-assistant.png)
+
 ## 贡献
 
 欢迎任何形式的贡献！如果你有建议或发现了问题，请在 GitHub 上提交问题或拉取请求。
